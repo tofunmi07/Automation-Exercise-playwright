@@ -48,6 +48,9 @@ export class AddCart extends BasePage {
 
   async EnterCart() {
     await this.clickElement(this.clickCartButton);
+  }
+
+  async enterCheckout() {
     await this.clickElement(this.clickProceedCheckout);
   }
 

@@ -8,6 +8,10 @@ export class DetailsPage extends BasePage {
   availability: Locator;
   condition: Locator;
   brand: Locator;
+  productDetails: Locator;
+  productQuantity: Locator;
+  addToCart: Locator;
+  viewCart: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -17,5 +21,16 @@ export class DetailsPage extends BasePage {
     this.availability = page.getByText(" In Stock");
     this.condition = page.getByText("New");
     this.brand = page.locator("p", { hasText: "Category:" });
+
+    this.productDetails = page.locator(".product-information");
+    this.productQuantity = page.locator("#quantity");
+    this.addToCart = page.getByRole("button", { name: "Add to cart" });
+    this.viewCart = page.getByText("View Cart", { exact: true });
+  }
+
+  async finalizeProduct(number: string) {
+    await this.fillField(this.productQuantity, number);
+    await this.clickElement(this.addToCart);
+    await this.clickElement(this.viewCart);
   }
 }

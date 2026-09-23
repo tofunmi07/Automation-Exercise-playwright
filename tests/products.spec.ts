@@ -4,6 +4,7 @@ import { DetailsPage } from "../pages/ProductDetailsPage";
 import { AddCart } from "../pages/Carts";
 import { Register } from "../pages/register";
 import { Payment } from "../pages/payments";
+import { Homepage } from "../pages/homepage";
 
 test("TC08: Verify all products and product details page", async ({ page }) => {
   const productsPage = new ProductPage(page);
@@ -87,6 +88,7 @@ test("TC14: Place Order: Register while Checkout", async ({ page }) => {
   await register.accountVerificationPage();
   await register.expectVisible(register.whologged);
   await addcart.EnterCart();
+  await addcart.enterCheckout();
   await addcart.expectVisible(addcart.verifyAddress);
   await addcart.expectVisible(addcart.verifyOrder);
   await addcart.checkout(
@@ -104,4 +106,41 @@ test("TC14: Place Order: Register while Checkout", async ({ page }) => {
   await payment.deleteAccount();
   await payment.expectVisible(payment.verifyDelete);
   await payment.confirmDelete();
+});
+
+test("TC10: Verify Subscription in home page", async ({ page }) => {
+  const homepage = new Homepage(page);
+  const emailAdd = "kaska12@yahoo.com";
+
+  await homepage.navigate("http://automationexercise.com");
+  await homepage.expectVisible(homepage.verifySub);
+  await homepage.subscription(emailAdd);
+  await page.screenshot({ path: "before-fill.png" });
+  await homepage.expectVisible(homepage.subSuccess);
+});
+
+test("TC11: Verify Subscription in Cart page", async ({ page }) => {
+  const homepage = new Homepage(page);
+  const addcart = new AddCart(page);
+  const emailAdd = "kaska12@yahoo.com";
+
+  await homepage.navigate("http://automationexercise.com");
+  await addcart.EnterCart();
+  await homepage.expectVisible(homepage.verifySub);
+  await homepage.subscription(emailAdd);
+  await homepage.expectVisible(homepage.subSuccess);
+});
+
+test("TC13: Verify Product quantity in Cart", async ({ page }) => {
+  const homepage = new Homepage(page);
+  const addcart = new AddCart(page);
+  const detailsPage = new DetailsPage(page);
+
+  await homepage.navigate("http://automationexercise.com");
+  await homepage.clickProduct();
+  await detailsPage.expectVisible(detailsPage.productDetails);
+  await detailsPage.finalizeProduct("5");
+
+  const product = await addcart.getProductDetails(0);
+  expect(product.quantity).toBe("5");
 });
