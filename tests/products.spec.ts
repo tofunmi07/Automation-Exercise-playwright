@@ -64,12 +64,13 @@ test("TC14: Place Order: Register while Checkout", async ({ page }) => {
   const addcart = new AddCart(page);
   const register = new Register(page);
   const payment = new Payment(page);
+  const uniqueEmail = `ochouser${Date.now()}@example.com`;
 
   await productsPage.navigate("http://automationexercise.com/");
   await productsPage.AddToCart();
   await addcart.expectVisible(addcart.cartTable);
   await addcart.gotoCheckout();
-  await register.signupPage("ocho", "ocho2121@yahoo.com");
+  await register.signupPage("ocho", uniqueEmail);
   await register.accountInfo({
     password: "Test1234!",
     firstName: "Okafor",
