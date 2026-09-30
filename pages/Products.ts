@@ -19,7 +19,10 @@ export class ProductPage extends BasePage {
   constructor(page: Page) {
     super(page);
     this.productClick = page.locator("//a[@href='/products']");
-    this.verifyProductPage = page.getByText("All Products");
+    this.verifyProductPage = page.getByRole("heading", {
+      name: "All Products",
+    });
+    //this.verifyProductPage = page.getByText("All Products");
     this.productList = page.locator("//div[@class='features_items']");
     this.clickProduct1 = page.locator("a[href='/product_details/1']");
     this.product1Page = page.locator("//div[@class='product-information']");
